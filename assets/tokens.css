@@ -1,0 +1,89 @@
+/*
+ * Red Noir 设计 token（源文件）
+ * ------------------------------------------------------------------
+ * 从「前端ai提示词复制库 / Red Noir Style」提取：
+ *   黑底 + 红 #ef233c 主色、zinc 灰阶文字、白色低透明度描边、
+ *   胶囊按钮、Bento 卡片、星空 + 红晕 + 网格背景、fade-in-up 入场。
+ *
+ * 零外网依赖：不使用 Tailwind / Iconify / Google Fonts；
+ * 图标为内联 SVG，字体为系统栈（近似 Manrope / Inter 的观感）。
+ *
+ * 作品集与 Agent 平台控制台使用同一套变量（值必须保持一致）。
+ */
+
+:root {
+    /* ---------- 品牌色 ---------- */
+    --accent: #ef233c;
+    --accent-hover: #ff3b52;
+    --accent-dim: rgba(239, 35, 60, .14);
+    --accent-glow: rgba(239, 35, 60, .5);
+    --accent-soft: rgba(239, 35, 60, .08);
+
+    /* ---------- 背景层次（黑 → 深红黑） ---------- */
+    --bg: #000000;
+    --bg-top: #1a0505;
+    --surface: rgba(255, 255, 255, .04);
+    --surface-2: rgba(255, 255, 255, .06);
+    --surface-3: rgba(255, 255, 255, .09);
+    --border: rgba(255, 255, 255, .10);
+    --border-strong: rgba(255, 255, 255, .20);
+    --grid-line: rgba(255, 255, 255, .03);
+
+    /* ---------- 文字 ---------- */
+    --text: #ffffff;
+    --text-muted: #a1a1aa;
+    --text-dim: #71717a;
+    --text-on-accent: #ffffff;
+
+    /* ---------- 语义色（在新底色上配平） ---------- */
+    --ok: #34d399;
+    --warn: #fbbf24;
+    --danger: #f87171;
+    --info: #7dd3fc;
+
+    /* ---------- 图表色序（红为主 + 青紫点缀） ---------- */
+    --chart-1: #ef233c;
+    --chart-2: #34d399;
+    --chart-3: #fbbf24;
+    --chart-4: #a78bfa;
+    --chart-5: #f87171;
+    --chart-6: #22d3ee;
+
+    /* ---------- 形态 ---------- */
+    --radius-pill: 999px;
+    --radius-card: 12px;
+    --radius-card-lg: 16px;
+    --radius-control: 10px;
+
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 24px;
+    --space-6: 32px;
+    --space-7: 48px;
+    --space-8: 80px;
+
+    /* ---------- 字体 ---------- */
+    --font-display: "Segoe UI Variable Display", "Segoe UI", "Microsoft YaHei", system-ui, sans-serif;
+    --font-sans: "Segoe UI", "Microsoft YaHei", system-ui, -apple-system, sans-serif;
+    --font-mono: ui-monospace, Consolas, "Cascadia Mono", monospace;
+    --font-size-xs: 11px;
+    --font-size-sm: 13px;
+    --font-size-md: 15px;
+    --font-size-lg: 18px;
+    --font-size-xl: 24px;
+
+    /* ---------- 阴影与动效 ---------- */
+    --shadow-card: 0 1px 2px rgba(0, 0, 0, .6);
+    --shadow-pop: 0 20px 60px rgba(0, 0, 0, .65);
+    --shadow-cta: 0 0 24px rgba(239, 35, 60, .35);
+    --ease: cubic-bezier(.22, .61, .36, 1);
+    --dur-fast: .15s;
+    --dur-mid: .3s;
+    --dur-slow: .8s;
+
+    /* ---------- 布局 ---------- */
+    --page-max: 1200px;
+    --nav-height: 64px;
+}

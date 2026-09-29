@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Agent 开发·运行·评测平台 · 项目详情</title>
+    <meta name="description" content="配置驱动的 Agent 运行时（LangGraph ReAct）、RAG 知识库、版本快照与软回滚、LLM-as-Judge 评测闭环、全链路 trace 与自研压测">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect x='4' y='4' width='8' height='8' rx='1.5' fill='%23ef233c' transform='rotate(45 8 8)'/></svg>">
+    <link rel="stylesheet" href="assets/tokens.css">
+    <link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+
+<div class="bg-layer gradient"></div>
+<div class="bg-layer grid"></div>
+
+<header class="topnav">
+    <div class="topnav-inner">
+        <a class="brand" href="index.html">
+            <span class="mark"></span>
+            <span><span data-site="name">你的名字</span> <small>· 作品集</small></span>
+        </a>
+        <nav class="topnav-links">
+            <a href="index.html">首页</a>
+            <a href="agent-platform.html">AI Agent 平台</a>
+            <a href="resume-assistant.html">简历优化助手</a>
+            <a href="#contact">联系</a>
+        </nav>
+    </div>
+</header>
+
+<main class="page">
+
+    <!-- ==================== 页首 ==================== -->
+    <section class="page-hero wrap">
+        <span class="eyebrow reveal"><span class="dot-live dot-ok"></span> 项目一 · 全栈 · 已本地跑通</span>
+        <h1 class="h1 reveal d1" style="margin-top: var(--space-5)">
+            <span class="gradient-text">AI Agent</span> <span class="accent">开发 · 运行 · 评测</span> <span class="gradient-text">平台</span>
+        </h1>
+        <p class="lead reveal d2" style="max-width: 760px; margin-top: var(--space-4)">
+            一个把「LLM Agent」当成工程系统来做的平台：Agent 可配置（提示词 / 模型 / 工具 / 知识库）、
+            运行可复现（版本快照）、效果可量化（自动评测 + 版本对比）、过程可观测（全链路 trace），
+            并且能自己给自己压测找瓶颈。
+        </p>
+        <div class="chips reveal d3" style="margin-top: var(--space-5)">
+            <span class="chip accent">FastAPI</span>
+            <span class="chip accent">LangGraph</span>
+            <span class="chip">PostgreSQL + pgvector</span>
+            <span class="chip">Redis / RQ</span>
+            <span class="chip">LiteLLM 网关</span>
+            <span class="chip">Vue 3（零构建）</span>
+            <span class="chip">Langfuse</span>
+            <span class="chip">Docker Compose</span>
+        </div>
+
+        <div class="hero-metrics reveal d4">
+            <div class="m"><div class="v accent">533</div><div class="k">RPS（4 并发压测）</div></div>
+            <div class="m"><div class="v">9<span class="muted" style="font-size:15px">ms</span></div><div class="k">P95 延迟 · 0 失败</div></div>
+            <div class="m"><div class="v">0.98</div><div class="k">评测综合分（满分 1）</div></div>
+            <div class="m"><div class="v">7</div><div class="k">类指标表 · 统一时间线</div></div>
+        </div>
+    </section>
+
+    <!-- ==================== 背景与目标 ==================== -->
+    <section class="wrap">
+        <div class="section-head" data-reveal>
+            <span class="eyebrow">背景与目标</span>
+            <h2 class="h2" style="margin-top: var(--space-4)">为什么不是「又一个能聊天的 Agent」</h2>
+        </div>
+        <div class="bento">
+            <div class="card col-6" data-reveal>
+                <h3>问题</h3>
+                <p>
+                    大多数 Agent Demo 停在「能对话」：模型换了、提示词改了，效果好不好全凭感觉；
+                    线上慢在哪、贵在哪、哪一步失败，也说不清楚。改一次配置就像掷一次骰子。
+                </p>
+            </div>
+            <div class="card col-6" data-reveal data-reveal-delay="120">
+                <h3>做法</h3>
+                <p>
+                    把 Agent 当作可发布的软件工件：<b>配置 → 版本快照 → 评测跑批 → 版本对比 → 回滚</b>；
+                    同时把每一次执行的 LLM / 检索 / 工具 / 图节点耗时与 token 全部落库，形成可回放的 trace。
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== 架构图 ==================== -->
+    <section class="wrap">
+        <div class="section-head" data-reveal>
+            <span class="eyebrow">系统架构</span>
+            <h2 class="h2" style="margin-top: var(--space-4)">五层结构：从控制台到模型网关</h2>
+        </div>
+        <div class="diagram" data-reveal>
+            <svg viewBox="0 0 860 620" role="img" aria-label="系统架构图">
+                <defs>
+                    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+                        <path d="M0 0 L10 5 L0 10 z" fill="#ef233c"/>
+                    </marker>
+                    <style>
+                        .band { fill: rgba(255,255,255,.04); stroke: rgba(255,255,255,.12); }
+                        .box { fill: rgba(0,0,0,.55); stroke: rgba(255,255,255,.14); }
+                        .box-hi { fill: rgba(239,35,60,.10); stroke: rgba(239,35,60,.45); }
+                        .t { fill: #ffffff; font-size: 12.5px; }
+                        .ts { fill: #a1a1aa; font-size: 11px; }
+                        .tk { fill: #71717a; font-size: 10.5px; letter-spacing: .08em; }
+                        .acc { fill: #ef233c; font-size: 11px; }
+                        .line { stroke: #ef233c; stroke-width: 1.4; fill: none; }
+                        .thinline { stroke: rgba(255,255,255,.16); stroke-width: 1; fill: none; }
+                    </style>
+                </defs>
+
+                <!-- 1 前端 -->
+                <rect class="band" x="20" y="14" width="820" height="86" rx="14"/>
+                <text class="tk" x="38" y="36">控制台前端（零构建 · 7 页）</text>
+                <rect class="box" x="38" y="46" width="112" height="38" rx="9"/><text class="t" x="52" y="70">工作台</text>
+                <rect class="box" x="158" y="46" width="112" height="38" rx="9"/><text class="t" x="172" y="70">Agent / 能力库</text>
+                <rect class="box" x="278" y="46" width="112" height="38" rx="9"/><text class="t" x="292" y="70">对话实验室</text>
+                <rect class="box" x="398" y="46" width="112" height="38" rx="9"/><text class="t" x="412" y="70">评测 / 对比</text>
+                <rect class="box" x="518" y="46" width="140" height="38" rx="9"/><text class="t" x="532" y="70">观测 · trace 回放</text>
+                <rect class="box-hi" x="666" y="46" width="156" height="38" rx="9"/><text class="t" x="680" y="70">实验室 · 压测 / 调试</text>
+
+                <path class="line" d="M430 100 L430 128" marker-end="url(#arrow)"/>
+                <text class="acc" x="440" y="120">REST / SSE</text>
+
+                <!-- 2 接口层 -->
+                <rect class="band" x="20" y="132" width="820" height="92" rx="14"/>
+                <text class="tk" x="38" y="154">接口层 · FastAPI</text>
+                <rect class="box" x="38" y="164" width="126" height="44" rx="9"/><text class="t" x="50" y="183">鉴权 / RBAC</text><text class="ts" x="50" y="199">JWT · 限流</text>
+                <rect class="box" x="172" y="164" width="126" height="44" rx="9"/><text class="t" x="184" y="183">agents / my</text><text class="ts" x="184" y="199">配置 · 能力绑定</text>
+                <rect class="box" x="306" y="164" width="126" height="44" rx="9"/><text class="t" x="318" y="183">knowledge</text><text class="ts" x="318" y="199">文档 · 检索</text>
+                <rect class="box" x="440" y="164" width="126" height="44" rx="9"/><text class="t" x="452" y="183">versions</text><text class="ts" x="452" y="199">快照 · 软回滚</text>
+                <rect class="box" x="574" y="164" width="120" height="44" rx="9"/><text class="t" x="586" y="183">evaluation</text><text class="ts" x="586" y="199">测试集 · run</text>
+                <rect class="box" x="702" y="164" width="120" height="44" rx="9"/><text class="t" x="714" y="183">metrics</text><text class="ts" x="714" y="199">聚合 · 排名</text>
+
+                <path class="line" d="M430 224 L430 252" marker-end="url(#arrow)"/>
+
+                <!-- 3 运行与评测 -->
+                <rect class="band" x="20" y="256" width="820" height="150" rx="14"/>
+                <text class="tk" x="38" y="278">运行与评测</text>
+                <rect class="box-hi" x="38" y="290" width="360" height="100" rx="11"/>
+                <text class="t" x="54" y="312">Agent Runtime · LangGraph StateGraph</text>
+                <rect class="box" x="54" y="322" width="96" height="30" rx="8"/><text class="ts" x="62" y="342">retrieve_knowledge</text>
+                <rect class="box" x="162" y="322" width="86" height="30" rx="8"/><text class="ts" x="176" y="342">chat</text>
+                <rect class="box" x="260" y="322" width="96" height="30" rx="8"/><text class="ts" x="272" y="342">tool_call</text>
+                <path class="line" d="M150 337 L162 337" marker-end="url(#arrow)"/>
+                <path class="line" d="M248 337 L260 337" marker-end="url(#arrow)"/>
+                <path class="thinline" d="M308 356 C308 374 205 374 205 356" marker-end="url(#arrow)"/>
+                <text class="ts" x="54" y="376">ReAct 回环：chat ⇄ tool_call；支持 Human-in-the-loop 中断与恢复</text>
+
+                <rect class="box" x="414" y="290" width="408" height="100" rx="11"/>
+                <text class="t" x="430" y="312">Evaluation · RQ 串行执行</text>
+                <rect class="box" x="430" y="322" width="116" height="30" rx="8"/><text class="ts" x="442" y="342">工具三档判分</text>
+                <rect class="box" x="554" y="322" width="116" height="30" rx="8"/><text class="ts" x="566" y="342">RAG recall</text>
+                <rect class="box" x="678" y="322" width="128" height="30" rx="8"/><text class="ts" x="690" y="342">LLM-as-Judge 三维</text>
+                <text class="ts" x="430" y="376">按版本快照复现 → stats 汇总 → 版本 A/B 对比 → 失败用例续跑</text>
+
+                <path class="line" d="M430 406 L430 434" marker-end="url(#arrow)"/>
+
+                <!-- 4 数据与观测 -->
+                <rect class="band" x="20" y="438" width="820" height="86" rx="14"/>
+                <text class="tk" x="38" y="460">数据与观测</text>
+                <rect class="box" x="38" y="470" width="150" height="40" rx="9"/><text class="t" x="50" y="495">PostgreSQL + pgvector</text>
+                <rect class="box" x="196" y="470" width="120" height="40" rx="9"/><text class="t" x="208" y="495">Redis（缓存 / 队列）</text>
+                <rect class="box" x="324" y="470" width="170" height="40" rx="9"/><text class="t" x="336" y="495">7 类指标表（耗时 / token）</text>
+                <rect class="box" x="502" y="470" width="150" height="40" rx="9"/><text class="t" x="514" y="495">统一 trace 时间线</text>
+                <rect class="box" x="660" y="470" width="162" height="40" rx="9"/><text class="t" x="672" y="495">Langfuse trace 树</text>
+
+                <path class="line" d="M430 524 L430 552" marker-end="url(#arrow)"/>
+
+                <!-- 5 模型网关 -->
+                <rect class="band" x="20" y="556" width="820" height="52" rx="14"/>
+                <rect class="box-hi" x="38" y="566" width="784" height="32" rx="9"/>
+                <text class="t" x="52" y="587">LLM 网关（LiteLLM Proxy）· 虚拟 key 白名单 · 多模型与参数兼容 · 免费额度模型池</text>
+            </svg>
+        </div>
+        <p class="note" data-reveal>
+            说明：架构图里的「Agent Runtime」与「Evaluation」是两条独立链路——前者服务真实对话，后者按版本快照复现跑批，
+            两者共用同一套能力绑定与指标采集。
+        </p>
+    </section>
+
+    <!-- ==================== 技术亮点 ==================== -->
+    <section class="wrap">
+        <div class="section-head" data-reveal>
+            <span class="eyebrow">技术亮点</span>
+            <h2 class="h2" style="margin-top: var(--space-4)">六个我认为最值得讲的设计</h2>
+        </div>
+        <div class="bento">
+            <div class="card col-4" data-reveal>
+                <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h6v6H4zM14 12h6v6h-6z"/><path d="M10 9h4M14 15H8"/></svg></div>
+                <h3 style="font-size: var(--font-size-md)">运行时工作流图（三重校验）</h3>
+                <p>
+                    用 <code>Command(goto=…)</code> 做动态路由时，LangGraph 的静态图会画错边。
+                    我改成「代码里声明拓扑 × 编译产物节点集合 × 真实执行轨迹」三方交叉校验，图上还能看到每个节点的实测 P95 与迁移次数。
+                </p>
+            </div>
+            <div class="card col-4" data-reveal data-reveal-delay="90">
+                <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5M4 19h16"/><path d="m7 15 3-4 3 3 4-6"/></svg></div>
+                <h3 style="font-size: var(--font-size-md)">评测闭环（数据驱动迭代）</h3>
+                <p>
+                    测试集覆盖 answer / tool / rag 三类：工具调用三档判分（exact / partial / miss）、
+                    RAG 期望命中文档召回率、LLM-as-Judge 三维打分，最后给出 stats 汇总与版本 A/B 差异。
+                </p>
+            </div>
+            <div class="card col-4" data-reveal data-reveal-delay="180">
+                <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v6M12 15v6M5 8l4 2M15 14l4 2M19 8l-4 2M9 14l-4 2"/></svg></div>
+                <h3 style="font-size: var(--font-size-md)">版本快照与软回滚</h3>
+                <p>
+                    发布版本会把提示词、模型、温度、工具完整定义、知识库绑定整体固化成自包含快照；
+                    回滚是「新建一个 Rollback 版本」而不是覆盖历史，评测可随时按 <code>version_id</code> 复现。
+                </p>
+            </div>
+            <div class="card col-4" data-reveal>
+                <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3 7 4-14 3 7h4"/></svg></div>
+                <h3 style="font-size: var(--font-size-md)">全链路 trace</h3>
+                <p>
+                    LLM 推理、向量检索、工具调用、图节点四类指标分别落库，再合并成一条按时间排序的 trace 时间线，
+                    前端用甘特图回放：能一眼看出「这一轮是模型慢还是检索慢」。
+                </p>
+            </div>
+            <div class="card col-4" data-reveal data-reveal-delay="90">
+                <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h16M4 17h16"/><circle cx="9" cy="7" r="2"/><circle cx="15" cy="12" r="2"/><circle cx="7" cy="17" r="2"/></svg></div>
+                <h3 style="font-size: var(--font-size-md)">能力绑定（工具 / 知识库）</h3>
+                <p>
+                    Agent 与能力是多对多绑定：勾选式全量覆盖保存，界面文案严格区分「解绑」（只解除关联）与「删除」（移除能力本身）；
+                    平台内置工具允许绑定但禁止删除。
+                </p>
+            </div>
+            <div class="card col-4" data-reveal data-reveal-delay="180">
+                <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z"/></svg></div>
+                <h3 style="font-size: var(--font-size-md)">性能工程（自研压测）</h3>
+                <p>
+                    控制台内置浏览器压测面板：固定并发 / 阶梯递增、实时 RPS 与 P50/P95/P99、状态码分布、逐秒曲线，结果可导出 JSON；
+                    同时标注了哪些接口被限流，避免把 429 误读成故障。
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== 实测数据 ==================== -->
+    <section class="wrap">
+        <div class="section-head" data-reveal>
+            <span class="eyebrow">实测数据</span>
+            <h2 class="h2" style="margin-top: var(--space-4)">都是本机真实跑出来的数</h2>
+        </div>
+        <div class="bento">
+            <div class="card col-7" data-reveal>
+                <h3>接口压测（自研面板 · 4 并发 / 5 秒）</h3>
+                <table class="data" style="margin-top: var(--space-4)">
+                    <thead><tr><th>指标</th><th>结果</th><th>说明</th></tr></thead>
+                    <tbody>
+                        <tr><td>请求总数</td><td class="num">1,764</td><td class="muted"><code>/api/v1/health</code>（不含数据库）</td></tr>
+                        <tr><td>吞吐</td><td class="num accent">533.6 RPS</td><td class="muted">浏览器端观测</td></tr>
+                        <tr><td>P95 延迟</td><td class="num">9 ms</td><td class="muted">P50 ≈ 8 ms</td></tr>
+                        <tr><td>失败数</td><td class="num">0</td><td class="muted">成功率 100%</td></tr>
+                    </tbody>
+                </table>
+                <p class="dim" style="margin-top: var(--space-3); font-size: var(--font-size-xs)">
+                    注：浏览器压测受单页面事件循环限制，数值用于相对比较与找拐点，不等于服务端极限。
+                </p>
+            </div>
+            <div class="card col-5" data-reveal data-reveal-delay="120">
+                <h3>评测与观测</h3>
+                <table class="data" style="margin-top: var(--space-4)">
+                    <thead><tr><th>指标</th><th>结果</th></tr></thead>
+                    <tbody>
+                        <tr><td>综合分（overall_avg）</td><td class="num accent">0.98</td></tr>
+                        <tr><td>工具精确命中率</td><td class="num">100%</td></tr>
+                        <tr><td>RAG 期望文档召回</td><td class="num">100%</td></tr>
+                        <tr><td>单会话 LLM 调用</td><td class="num">1 次 / 2.9 s</td></tr>
+                        <tr><td>检索耗时</td><td class="num">38 ~ 193 ms</td></tr>
+                        <tr><td>Token 用量（一次对话）</td><td class="num">879 + 1,308</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== 截图 ==================== -->
+    <section class="wrap">
+        <div class="section-head" data-reveal>
+            <span class="eyebrow">界面截图</span>
+            <h2 class="h2" style="margin-top: var(--space-4)">控制台实拍</h2>
+            <p class="lead" style="margin-top: var(--space-3)">主题是 Red Noir（黑底 + 红），零构建原生前端：无 CDN、无 UI 框架依赖。</p>
+        </div>
+        <div class="shots" data-reveal>
+            <figure class="shot"><img src="shots/agent-dashboard.png" alt="工作台：KPI、趋势、Top Agent、工具热度"><figcaption>工作台：会话质量、模型耗时、Token 成本一屏看完</figcaption></figure>
+            <figure class="shot"><img src="shots/agent-detail-workflow.png" alt="Agent 详情：运行时工作流图"><figcaption>Agent 详情：运行时工作流图 + 节点 P95 热力</figcaption></figure>
+            <figure class="shot"><img src="shots/agent-chat-radiant.png" alt="对话实验室：辐射式输入与 trace"><figcaption>对话实验室：辐射式输入 + 右侧 trace 甘特</figcaption></figure>
+            <figure class="shot"><img src="shots/agent-eval.png" alt="评测中心：测试集、run、A/B 对比"><figcaption>评测中心：测试集 / run / 版本 A/B 对比</figcaption></figure>
+            <figure class="shot"><img src="shots/agent-capabilities-tools.png" alt="能力库：工具与知识库"><figcaption>能力库：工具（内置可绑定禁删）+ 知识库</figcaption></figure>
+            <figure class="shot"><img src="shots/agent-observe.png" alt="观测：trace 甘特与 Token"><figcaption>观测：trace 甘特、Token 日消耗、并发</figcaption></figure>
+            <figure class="shot"><img src="shots/agent-lab.png" alt="实验室：压测与接口调试"><figcaption>实验室：压测面板与接口调试</figcaption></figure>
+            <figure class="shot"><img src="shots/agent-mobile.png" alt="移动端适配"><figcaption>移动端适配</figcaption></figure>
+        </div>
+    </section>
+
+    <!-- ==================== 工程细节 ==================== -->
+    <section class="wrap">
+        <div class="section-head" data-reveal>
+            <span class="eyebrow">工程细节</span>
+            <h2 class="h2" style="margin-top: var(--space-4)">我在这两个项目里修掉的真实缺陷</h2>
+            <p class="lead" style="margin-top: var(--space-3)">不是教科书式的最佳实践清单，而是我自己踩到、定位、修掉，并补了回归手段的问题。</p>
+        </div>
+        <div class="bento">
+            <div class="card col-6" data-reveal>
+                <h3 style="font-size: var(--font-size-md)">静默失败最可怕</h3>
+                <ul class="bullet-list">
+                    <li>内置工具绑定被权限判断静默跳过：接口返回成功，<code>tool_count</code> 却是 0 —— 改成 owner 为空即视为平台内置工具。</li>
+                    <li>LLM token 用量被硬编码成 0，导致 Token / 成本看板恒为 0 —— 改为从 <code>usage_metadata</code> 三级兜底提取。</li>
+                    <li>知识库绑定接口返回 <code>{kb_ids:[…]}</code>，前端却按列表解析，永远显示「未绑定」。</li>
+                </ul>
+            </div>
+            <div class="card col-6" data-reveal data-reveal-delay="120">
+                <h3 style="font-size: var(--font-size-md)">边界与权限</h3>
+                <ul class="bullet-list">
+                    <li>管理端删除工具的接口<b>没有鉴权</b>，任何人都能删掉平台自带的 calculator —— 补登录 + admin，并对内置工具返回 409。</li>
+                    <li>版本被评测 run 引用时不允许删除，接口直接返回依赖的 run 明细（id / 状态 / 测试集 / 完成数），前端列表格，不用用户自己查。</li>
+                    <li>会话删除连带清理 LLM / 工具 / 检索 / 节点四类明细，避免外键残留。</li>
+                    <li>前端任何一个 401 都会清 token 并重渲染，曾经造成无限刷请求 —— 加了重入保护。</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== 链接 ==================== -->
+    <section class="wrap" id="contact">
+        <div class="bento">
+            <div class="card col-12" data-reveal>
+                <h3>源码与文档</h3>
+                <p>仓库里包含完整后端、控制台前端、Docker Compose、Alembic 迁移、pytest 回归（88 passed）与演示数据脚本。</p>
+                <div class="hero-actions" style="justify-content: flex-start; margin-top: var(--space-5)">
+                    <a class="btn primary" data-repo="agent" href="#">查看 GitHub 源码</a>
+                    <a class="btn" data-site="github" href="#">我的 GitHub 主页</a>
+                    <a class="btn" href="index.html#contact">联系我</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<footer class="site-foot">
+    <div class="wrap">
+        <span>© 2026 <span data-site="name">你的名字</span> · AI Agent 开发·运行·评测平台</span>
+        <span><a href="index.html">返回作品集首页</a></span>
+    </div>
+</footer>
+
+<div class="dock-wrap" id="dock"></div>
+<script src="assets/dock.js" defer></script>
+</body>
+</html>

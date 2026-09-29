@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>可子翔 - 简历</title>
+<style>
+  /* ===== ATS 友好打印简历：单栏 / 标准标题 / >=10pt / 无表格无图标 / 文字可选中 ===== */
+  @page { size: A4; margin: 11mm 12mm; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { -webkit-print-color-adjust: exact; }
+  body {
+    font-family: "Microsoft YaHei", "PingFang SC", "Songti SC", sans-serif;
+    font-size: 10pt; line-height: 1.4; color: #111;
+    max-width: 186mm; margin: 0 auto; background: #fff;
+  }
+  /* 版式开关（仅屏幕显示） */
+  .switcher { position: fixed; top: 8px; right: 8px; z-index: 9; display: flex; gap: 6px; }
+  .switcher button {
+    padding: 6px 14px; font-size: 12px; cursor: pointer; border: 1px solid #999;
+    background: #fff; border-radius: 4px;
+  }
+  .switcher button.on { background: #111; color: #fff; border-color: #111; }
+  @media print { .switcher { display: none; } body { max-width: none; } }
+
+  header { text-align: center; padding-bottom: 6px; border-bottom: 1.6pt solid #111; }
+  header h1 { font-size: 19pt; letter-spacing: 2px; margin-bottom: 2px; }
+  header .intent { font-size: 10.5pt; font-weight: 600; margin-bottom: 3px; }
+  header .contact { font-size: 9.5pt; color: #222; }
+
+  h2 {
+    font-size: 11.5pt; font-weight: 700; margin: 7px 0 3px;
+    border-bottom: 0.7pt solid #999; padding-bottom: 1px; letter-spacing: 1px;
+  }
+  .proj-head { display: flex; justify-content: space-between; align-items: baseline; margin-top: 5px; }
+  .proj-head .name { font-size: 10.8pt; font-weight: 700; }
+  .proj-head .period { font-size: 9.5pt; color: #333; }
+  .subline { font-size: 9.5pt; color: #333; margin: 1px 0; }
+  .subline b { color: #111; }
+  ul { list-style: none; }
+  li { padding-left: 9pt; text-indent: -9pt; margin-bottom: 1.5px; text-align: justify; }
+  li::before { content: "· "; font-weight: 700; }
+  .edu-row, .hl { display: flex; justify-content: space-between; align-items: baseline; }
+  .hl-line { margin-top: 1.5px; }
+</style>
+</head>
+<body>
+<div class="switcher" id="sw"></div>
+<div id="app"></div>
+
+<script>
+/* ============ 内容数据（一处维护，三版渲染） ============ */
+const C = {
+  name: "可子翔",
+  intent: { ai: "AI 应用开发实习生", backend: "Python 后端开发实习生", fullstack: "全栈开发实习生" },
+  phone: "17839928640",
+  email: "2070819828@qq.com",
+  github: "github.com/600kill",
+  portfolio: "600kill.github.io/portfolio", // TODO: 部署后核对
+  age: "20 岁",
+};
+
+const EDU = {
+  school: "宁夏理工学院", major: "软件工程（本科）", time: "2024.09 – 2028.06",
+  courses: "数据结构 / 操作系统 / 计算机网络 / 数据库系统 / 软件工程 / 机器学习",
+};
+
+/* 技能四行：按变体重排 */
+const SK = {
+  base: {
+    lang:  "语言基础：Python（面向对象、常用数据结构与算法）、SQL、JavaScript、HTML/CSS",
+    ai:    "AI 工程：LangGraph / LangChain（StateGraph 编排、Tool Calling、多 Agent、Human-in-the-loop）、RAG（pgvector、文档 ETL、混合检索与重排序）、LLM-as-Judge 评测、Prompt 工程、LiteLLM 多模型调度、MCP 协议（接触）",
+    be:    "后端：FastAPI（asyncio 异步、SSE 流式）、PostgreSQL、Redis（哈希缓存与宕机降级 / LRU 兜底、RQ 队列）、JWT / RBAC、SlowAPI 限流、Alembic、pytest",
+    fe:    "前端与工程化：Vue 3 + Vite、Docker / Docker Compose、Linux、Git、Langfuse、Trae / Claude Code 等 AI 编程工具",
+  },
+};
+const SKILLS = {
+  ai:        [SK.base.lang, SK.base.ai, SK.base.be, SK.base.fe],
+  backend:   [SK.base.lang, SK.base.be, SK.base.ai, SK.base.fe],
+  fullstack: [SK.base.fe, SK.base.lang, SK.base.be, SK.base.ai],
+};
+
+/* 项目一 bullet 池 */
+const P1 = {
+  rt:  "独立设计配置驱动的 Agent 运行时：基于 LangGraph StateGraph 实现 ReAct 工具循环（知识检索→对话→工具调用回环）与 Human-in-the-loop 中断恢复，配套 pgvector RAG 知识库与 LiteLLM 多模型调度，单会话平均 1 次 LLM 调用完成（2.9s）",
+  eval:"构建 LLM-as-Judge 自动评测闭环：测试集考验 Agent 工具调用正确性与 answer 质量——工具三档判分、期望文档召回率、LLM 对 answer 三维打分，支持版本 A/B 对比与失败用例续跑；实测工具命中率与召回率 100%，综合分 0.98",
+  snap:"实现版本快照与软回滚：发布时将提示词、模型参数、工具完整定义、知识库绑定固化为自包含快照；刻意选择「新建回滚版本」而非覆盖历史（接受版本表增长），换来任何评测可按 version_id 精确复现",
+  obsload:"落地全链路可观测：LLM / 向量检索 / 工具 / 图节点四类耗时与 token 落 7 张指标表，合并为前端甘特图可回放 trace（定位「模型慢还是检索慢」），接入 Langfuse；自研浏览器压测面板可对任意业务接口做固定/阶梯并发压测（P50/P95/P99、429 标注），对向量检索接口实测 4 并发 30s 1207 请求，40.1 RPS、P95 113ms、0 失败",
+  eng: "工程保障：JWT + RBAC 鉴权，独立定位并修复「管理端工具删除接口未鉴权」「401 触发前端重入导致无限刷请求」两个真实缺陷；SlowAPI 限流、Docker Compose 一键部署，pytest 88 项测试通过（3 项跳过）",
+  fe1: "独立开发 7 页 Vue 3 控制台：Agent 配置表单、版本对比、评测报告、trace 甘特图与压测曲线组件，完成前后端联调与打包部署",
+};
+/* 项目二 bullet 池 */
+const P2 = {
+  pipe: "用 LangGraph 编排 5 Agent 串行流水线（简历解析 → JD 三级拆解 → 顾问诊断 → XYZ 结构改写 → HR 五维质检）；质检不达标时携带 fix_instructions 自动打回重写（≤3 轮，轮次对用户可见），避免黑盒重试",
+  async:"设计异步任务架构：任务模型仅需入队与重试，刻意选 RQ 而非 Celery（以轻量运维换掉 broker 级复杂度）；FastAPI 建记录入队即返回，RQ Worker 独立执行 2–7 分钟 LLM 流程，以 stream_mode=\"updates\" 逐节点落库，步骤状态全部由真实执行推导，不做假进度条",
+  cache:"实现按输入哈希隔离的 Redis 缓存（简历 / JD / 诉求 / 岗位 / 模式五要素，参数顺序无关），命中时跳过 LLM 调用秒级返回，Redis 宕机自动降级直连",
+  qc:  "建立质量约束机制：改写 Agent 只重组已有事实、严禁编造指标拔高经历；质检 Agent 每维打分必须引用简历原文作证据；3 份网上搜集的真实简历实测五维均分 86 → 95.4（+9.4），最优样本 85 → 100",
+  fe2: "全栈交付 Vue 3 前端：任务步骤追踪、五维评分报告、优化前后双栏 diff 对比；bcrypt + JWT + 记录归属校验防越权；独立定位修复评分差值显示 1.219999… 的浮点缺陷（四舍五入 + clamp 边界保护）",
+};
+
+const PROJECTS = [
+  {
+    name: "AI Agent 开发·运行·评测平台", period: "2026.06 – 2026.09",
+    sub:  "个人项目 · 独立完成（需求设计 / FastAPI 后端 / Vue 3 控制台前端 / Docker 部署）",
+    stack:"Python / FastAPI / LangGraph / PostgreSQL + pgvector / Redis / Vue 3 / Docker",
+    bullets: {
+      ai:        [P1.rt, P1.eval, P1.snap, P1.obsload, P1.eng],
+      backend:   [P1.obsload, P1.eng, P1.rt, P1.snap, P1.eval],
+      fullstack: [P1.rt, P1.eval, P1.obsload, P1.fe1, P1.eng],
+    },
+  },
+  {
+    name: "简历多智能体优化助手", period: "2026.09 – 至今",
+    sub:  "个人项目 · 独立完成（FastAPI + RQ Worker / Vue 3 + Vite 前端）",
+    stack:"Python / FastAPI / LangGraph / Redis(RQ) / PostgreSQL / Vue 3 + Vite",
+    bullets: {
+      ai:        [P2.pipe, P2.qc, P2.async, P2.cache, P2.fe2],
+      backend:   [P2.async, P2.cache, P2.pipe, P2.qc, P2.fe2],
+      fullstack: [P2.pipe, P2.fe2, P2.async, P2.cache, P2.qc],
+    },
+  },
+];
+
+const HIGHLIGHTS = {
+  ai:        "两个项目均独立完成从需求、后端、前端到 Docker 部署的全链路交付；习惯以评测、压测、trace 数据驱动迭代而非凭感觉调参；保持开源习惯，GitHub 多仓库沉淀。",
+  backend:   "两个项目均独立完成从需求、后端、前端到 Docker 部署的全链路交付；关注接口可观测与可复现：压测找拐点、trace 定位慢环节、软回滚保证评测可复现。",
+  fullstack: "两个项目均独立完成从需求、前后端开发到 Docker 部署的端到端交付；前端重视真实数据可视化（甘特 trace、评分报告、双栏 diff），后端重视评测与压测驱动迭代。",
+};
+
+/* ============ 渲染 ============ */
+const VARIANTS = ["ai", "backend", "fullstack"];
+const v = new URLSearchParams(location.search).get("v");
+const cur = VARIANTS.includes(v) ? v : "ai";
+
+function esc(s){ return s.replace(/&/g,"&amp;").replace(/</g,"&lt;"); }
+
+function render(variant){
+  const sk = SKILLS[variant].map(s=>`<li>${esc(s)}</li>`).join("");
+  const projs = PROJECTS.map(p => `
+    <div class="proj-head"><span class="name">${p.name}</span><span class="period">${p.period}</span></div>
+    <div class="subline">${p.sub}　<b>技术栈：${p.stack}</b></div>
+    <ul>${p.bullets[variant].map(b=>`<li>${esc(b)}</li>`).join("")}</ul>`).join("");
+  document.getElementById("app").innerHTML = `
+    <header>
+      <h1>${C.name}</h1>
+      <div class="intent">求职意向：${C.intent[variant]}（${C.age}）</div>
+      <div class="contact">${C.phone} ｜ ${C.email} ｜ ${C.github} ｜ ${C.portfolio}</div>
+    </header>
+    <h2>教育背景</h2>
+    <div class="edu-row"><span><b>${EDU.school}</b>　${EDU.major}</span><span>${EDU.time}</span></div>
+    <div class="subline">相关课程：${EDU.courses}</div>
+    <h2>专业技能</h2>
+    <ul>${sk}</ul>
+    <h2>项目经历</h2>
+    ${projs}
+    <h2>个人亮点</h2>
+    <div class="hl-line">${esc(HIGHLIGHTS[variant])}</div>`;
+}
+
+render(cur);
+
+const sw = document.getElementById("sw");
+VARIANTS.forEach(name => {
+  const b = document.createElement("button");
+  b.textContent = {ai:"AI 应用版", backend:"后端版", fullstack:"全栈版"}[name];
+  if (name === cur) b.classList.add("on");
+  b.onclick = () => location.search = "?v=" + name;
+  sw.appendChild(b);
+});
+</script>
+</body>
+</html>

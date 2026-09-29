@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>简历多智能体优化助手 · 项目详情</title>
+    <meta name="description" content="LangGraph 编排的 5 Agent 简历优化流水线：解析 → JD 分析 → 顾问诊断 → 改写 → HR 质检，质检不通过自动打回重写（≤3 轮）">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect x='4' y='4' width='8' height='8' rx='1.5' fill='%23ef233c' transform='rotate(45 8 8)'/></svg>">
+    <link rel="stylesheet" href="assets/tokens.css">
+    <link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+
+<div class="bg-layer gradient"></div>
+<div class="bg-layer grid"></div>
+
+<header class="topnav">
+    <div class="topnav-inner">
+        <a class="brand" href="index.html">
+            <span class="mark"></span>
+            <span><span data-site="name">你的名字</span> <small>· 作品集</small></span>
+        </a>
+        <nav class="topnav-links">
+            <a href="index.html">首页</a>
+            <a href="agent-platform.html">AI Agent 平台</a>
+            <a href="resume-assistant.html">简历优化助手</a>
+            <a href="#contact">联系</a>
+        </nav>
+    </div>
+</header>
+
+<main class="page">
+
+    <!-- ==================== 页首 ==================== -->
+    <section class="page-hero wrap">
+        <span class="eyebrow reveal"><span class="dot-live dot-ok"></span> 项目二 · 全栈 · 多 Agent 流水线</span>
+        <h1 class="h1 reveal d1" style="margin-top: var(--space-5)">
+            <span class="gradient-text">简历多智能体</span> <span class="accent">优化助手</span>
+        </h1>
+        <p class="lead reveal d2" style="max-width: 760px; margin-top: var(--space-4)">
+            输入简历原文、目标岗位 JD 和个人诉求，5 个 Agent 依次完成
+            <b>解析 → JD 分析 → 顾问诊断 → 简历改写 → 模拟 HR 质检</b>；
+            质检不达标会带着具体修改意见<b>自动打回改写（最多 3 轮）</b>，最终产出五维评分报告与岗位定制版简历。
+        </p>
+        <div class="chips reveal d3" style="margin-top: var(--space-5)">
+            <span class="chip accent">FastAPI</span>
+            <span class="chip accent">LangGraph（5 Agent）</span>
+            <span class="chip">RQ 异步任务</span>
+            <span class="chip">PostgreSQL</span>
+            <span class="chip">Redis 缓存 / 队列</span>
+            <span class="chip">Vue 3 + Vite</span>
+            <span class="chip">OpenAI 兼容 LLM</span>
+        </div>
+
+        <div class="hero-metrics reveal d4">
+            <div class="m"><div class="v accent">+9.4</div><div class="k">HR 五维平均提分</div></div>
+            <div class="m"><div class="v">100<span class="muted" style="font-size:15px">/100</span></div><div class="k">最优样本满分</div></div>
+            <div class="m"><div class="v">3</div><div class="k">组真实样本验证</div></div>
+            <div class="m"><div class="v">2</div><div class="k">种工作流（含前后对比）</div></div>
+        </div>
+    </section>
+
+    <!-- ==================== 背景与目标 ==================== -->
+    <section class="wrap">
+        <div class="section-head" data-reveal>
+            <span class="eyebrow">背景与目标</span>
+            <h2 class="h2" style="margin-top: var(--space-4)">把「改简历」这件焦虑的事，变成一次有条理的流程</h2>
+        </div>
+        <div class="bento">
+            <div class="card col-6" data-reveal>
+                <h3>问题</h3>
+                <p>
+                    找实习时改简历最痛的不是「不会写」，而是不知道<b>改完到底有没有变好</b>：
+                    优化建议一堆，但没人告诉你匹配度提升了多少、有没有为了好看而编造经历。
+                </p>
+            </div>
+            <div class="card col-6" data-reveal data-reveal-delay="120">
+                <h3>做法</h3>
+                <p>
+                    用「改写 + 独立质检」的双角色结构：改写 Agent 只重组已有事实（证据优先，不编造指标），
+                    HR 质检 Agent 独立按五维打分、每条意见必须引用简历原文作为依据，不达标就带着
+                    <code>fix_instructions</code> 打回重写。
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== 流水线图 ==================== -->
+    <section class="wrap">
+        <div class="section-head" data-reveal>
+            <span class="eyebrow">多 Agent 流水线</span>
+            <h2 class="h2" style="margin-top: var(--space-4)">同一张 LangGraph 图，两种工作流</h2>
+        </div>
+        <div class="diagram" data-reveal>
+            <svg viewBox="0 0 860 420" role="img" aria-label="多 Agent 流水线图">
+                <defs>
+                    <marker id="arrow2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+                        <path d="M0 0 L10 5 L0 10 z" fill="#ef233c"/>
+                    </marker>
+                    <style>
+                        .b { fill: rgba(255,255,255,.04); stroke: rgba(255,255,255,.12); }
+                        .bx { fill: rgba(0,0,0,.55); stroke: rgba(255,255,255,.14); }
+                        .bx-hi { fill: rgba(239,35,60,.10); stroke: rgba(239,35,60,.45); }
+                        .t2 { fill: #ffffff; font-size: 12.5px; }
+                        .s2 { fill: #a1a1aa; font-size: 11px; }
+                        .k2 { fill: #71717a; font-size: 10.5px; letter-spacing: .08em; }
+                        .a2 { fill: #ef233c; font-size: 11px; }
+                        .l2 { stroke: #ef233c; stroke-width: 1.4; fill: none; }
+                        .tw { stroke: rgba(255,255,255,.16); stroke-width: 1; fill: none; stroke-dasharray: 4 4; }
+                    </style>
+                </defs>
+
+                <rect class="b" x="16" y="14" width="828" height="120" rx="14"/>
+                <text class="k2" x="34" y="36">① 输入与并行解析</text>
+                <rect class="bx" x="34" y="48" width="170" height="52" rx="9"/><text class="t2" x="48" y="70">简历解析者</text><text class="s2" x="48" y="88">结构化 JSON，忠于原文</text>
+                <rect class="bx" x="216" y="48" width="170" height="52" rx="9"/><text class="t2" x="230" y="70">JD 分析师</text><text class="s2" x="230" y="88">must_have / 加分项拆解</text>
+                <rect class="bx-hi" x="640" y="48" width="186" height="52" rx="9"/><text class="t2" x="654" y="70">两种模式</text><text class="s2" x="654" y="88">优化后测评 / 前后对比测评</text>
+                <path class="tw" d="M398 74 L640 74"/>
+
+                <path class="l2" d="M120 100 L120 132" marker-end="url(#arrow2)"/>
+                <path class="l2" d="M301 100 L301 132" marker-end="url(#arrow2)"/>
+
+                <rect class="b" x="16" y="136" width="828" height="86" rx="14"/>
+                <text class="k2" x="34" y="158">② 诊断与改写</text>
+                <rect class="bx" x="34" y="168" width="180" height="42" rx="9"/><text class="t2" x="48" y="194">求职顾问（诊断）</text>
+                <rect class="bx" x="226" y="168" width="180" height="42" rx="9"/><text class="t2" x="240" y="194">简历改写员（XYZ 结构）</text>
+                <path class="l2" d="M214 189 L226 189" marker-end="url(#arrow2)"/>
+                <text class="s2" x="420" y="194">改写遵循「证据优先」：只重组已有事实，不编造指标</text>
+
+                <path class="l2" d="M316 222 L316 254" marker-end="url(#arrow2)"/>
+
+                <rect class="b" x="16" y="258" width="828" height="92" rx="14"/>
+                <text class="k2" x="34" y="280">③ HR 质检（独立评分，不达标打回）</text>
+                <rect class="bx-hi" x="34" y="292" width="210" height="42" rx="9"/><text class="t2" x="48" y="318">模拟 HR 质检员</text>
+                <text class="s2" x="256" y="306">五维评分：JD 匹配 / 内容证据 / 真实性 / ATS 友好 / 可读性</text>
+                <text class="s2" x="256" y="324">每维度必须引用简历原文作为证据；不达标返回 fix_instructions</text>
+                <path class="l2" d="M244 313 C520 313 520 189 406 189" marker-end="url(#arrow2)"/>
+                <text class="a2" x="470" y="252">打回改写（≤3 轮，轮次对外可见）</text>
+
+                <path class="l2" d="M430 350 L430 372" marker-end="url(#arrow2)"/>
+                <rect class="b" x="16" y="376" width="828" height="34" rx="12"/>
+                <text class="t2" x="34" y="398">产出：五维评分报告 + 优化后简历（ATS 友好 Markdown）+ 逐条优化建议；前后对比模式还给出分数差值与两版测评意见</text>
+            </svg>
+        </div>
+        <p class="note" data-reveal>
+            两种模式由 <code>AgentState.mode</code>（<code>optimize</code> / <code>compare</code>）驱动同一张图：
+            选择「优化后测评」时基线测评节点是纯 pass-through，不产生额外 LLM 调用。
+        </p>
+    </section>
+
+    <!-- ==================== 技术亮点 ==================== -->
+    <section class="wrap">
+        <div class="section-head" data-reveal>
+            <span class="eyebrow">技术亮点</span>
+            <h2 class="h2" style="margin-top: var(--space-4)">六个实现细节</h2>
+        </div>
+        <div class="bento">
+            <div class="card col-4" data-reveal>
+                <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6l1 5H8l1-5z"/><path d="M6 8h12l-1 13H7L6 8z"/></svg></div>
+                <h3 style="font-size: var(--font-size-md)">5 Agent Prompt 体系</h3>
+                <p>每个 Agent 有明确的职责边界与输出契约：解析者严格结构化 JSON、JD 分析师做三级拆解、改写员按 XYZ 结构重写、质检员做证据化打分。</p>
+            </div>
+            <div class="card col-4" data-reveal data-reveal-delay="90">
+                <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 4v5h-5"/></svg></div>
+                <h3 style="font-size: var(--font-size-md)">质检回环（≤3 轮）</h3>
+                <p>质检不通过时携带具体修改意见回到改写节点，最多 3 轮；轮次对外暴露，前端能看见「第 2 轮改写」而不是黑盒重试。</p>
+            </div>
+            <div class="card col-4" data-reveal data-reveal-delay="180">
+                <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M5 8l7-5 7 5v8l-7 5-7-5z"/></svg></div>
+                <h3 style="font-size: var(--font-size-md)">异步任务架构</h3>
+                <p>FastAPI 收到请求只做「建记录 + RQ 入队」立即返回；LangGraph 在独立 Worker 进程执行，LLM 慢（2–7 分钟）不占用 API 连接，前端按 2 秒轮询。</p>
+            </div>
+            <div class="card col-4" data-reveal>
+                <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h5l2 3h9"/><path d="M4 17h5l2-3h9"/></svg></div>
+                <h3 style="font-size: var(--font-size-md)">步骤状态不造假</h3>
+                <p>用 <code>stream_mode="updates"</code> 逐节点消费图事件，每个节点执行完毕即落库 PG + Redis；前端的 ✅ / 🔄 / ☐ 全部由真实步骤推导，<b>不做百分比假进度条</b>。</p>
+            </div>
+            <div class="card col-4" data-reveal data-reveal-delay="90">
+                <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v12c0 1.7 3.6 3 8 3s8-1.3 8-3V6"/></svg></div>
+                <h3 style="font-size: var(--font-size-md)">缓存按模式隔离</h3>
+                <p>结果缓存 key 由「简历 / JD / 诉求 / 岗位 / 模式」五项输入哈希而成，参数顺序不影响命中；命中时秒级返回并标注「跳过大模型调用」，Redis 不可用时自动降级。</p>
+            </div>
+            <div class="card col-4" data-reveal data-reveal-delay="180">
+                <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 4v5c0 4.6-3 8-7 9-4-1-7-4.4-7-9V7l7-4z"/><path d="m9 12 2 2 4-4"/></svg></div>
+                <h3 style="font-size: var(--font-size-md)">异常与权限</h3>
+                <p>LLM 超时 / 502 / 连接失败在节点级捕获，落库 <code>failed_step</code> 并给前端中文提示，原始堆栈只进日志；bcrypt + JWT + 记录归属校验防越权。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== 实测数据 ==================== -->
+    <section class="wrap">
+        <div class="section-head" data-reveal>
+            <span class="eyebrow">实测数据</span>
+            <h2 class="h2" style="margin-top: var(--space-4)">三组真实样本的前后对比</h2>
+            <p class="lead" style="margin-top: var(--space-3)">
+                评分由 HR 质检 Agent 独立给出，优化前后使用同一套标准；五维分值与差值在前端以「分数 / 满分」展示。
+            </p>
+        </div>
+        <div class="bento">
+            <div class="card col-7" data-reveal>
+                <h3>样本 C（潜力股）五维变化</h3>
+                <table class="data" style="margin-top: var(--space-4)">
+                    <thead><tr><th>评估维度</th><th>优化前</th><th>优化后</th><th>变化</th></tr></thead>
+                    <tbody>
+                        <tr><td>JD 匹配度</td><td class="num">25/35</td><td class="num">35/35</td><td class="up">+10</td></tr>
+                        <tr><td>内容证据质量</td><td class="num">20/25</td><td class="num">25/25</td><td class="up">+5</td></tr>
+                        <tr><td>真实性边界</td><td class="num">15/15</td><td class="num">15/15</td><td class="flat">0</td></tr>
+                        <tr><td>ATS 友好性</td><td class="num">15/15</td><td class="num">15/15</td><td class="flat">0</td></tr>
+                        <tr><td>可读性</td><td class="num">10/10</td><td class="num">10/10</td><td class="flat">0</td></tr>
+                        <tr><td><b>总分</b></td><td class="num"><b>85</b></td><td class="num accent"><b>100</b></td><td class="up"><b>+15</b></td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="card col-5" data-reveal data-reveal-delay="120">
+                <h3>三组样本总览</h3>
+                <table class="data" style="margin-top: var(--space-4)">
+                    <thead><tr><th>样本</th><th>优化前</th><th>优化后</th><th>净提升</th></tr></thead>
+                    <tbody>
+                        <tr><td>样本 A（高基线）</td><td class="num">88</td><td class="num">89.22</td><td class="up">+1.22</td></tr>
+                        <tr><td>样本 B（技术匹配）</td><td class="num">85</td><td class="num">97</td><td class="up">+12</td></tr>
+                        <tr><td>样本 C（潜力股）</td><td class="num">85</td><td class="num accent">100</td><td class="up">+15</td></tr>
+                        <tr><td><b>平均</b></td><td class="num"><b>86</b></td><td class="num"><b>95.4</b></td><td class="up"><b>+9.4</b></td></tr>
+                    </tbody>
+                </table>
+                <p class="dim" style="margin-top: var(--space-3); font-size: var(--font-size-xs)">
+                    样本 A 属于高基线样本，提升空间有限（+1.22）；这也说明质检打分不是一味给高分。
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== 截图 ==================== -->
+    <section class="wrap">
+        <div class="section-head" data-reveal>
+            <span class="eyebrow">界面截图</span>
+            <h2 class="h2" style="margin-top: var(--space-4)">产品实拍</h2>
+            <p class="lead" style="margin-top: var(--space-3)">
+                前端是 Vue 3 + Vite，设计上刻意避开「炫技赛博」：低饱和的纸白 + 墨蓝 + 焦糖橙，
+                信息层级靠留白和排版建立。
+            </p>
+        </div>
+        <div class="shots" data-reveal>
+            <figure class="shot"><img src="shots/resume-home.png" alt="首页：填写简历与岗位"><figcaption>首页：选择测评方式，填写简历 / JD / 补充诉求</figcaption></figure>
+            <figure class="shot"><img src="shots/resume-running.png" alt="执行中：步骤指示器"><figcaption>执行中：步骤指示器实时推进（无假进度条）</figcaption></figure>
+            <figure class="shot"><img src="shots/resume-report.png" alt="分析报告：HR 五维评分与优化建议"><figcaption>分析报告：HR 五维评分、JD 关键词、逐条建议</figcaption></figure>
+            <figure class="shot"><img src="shots/resume-diff.png" alt="优化前后简历并排对比"><figcaption>优化前后简历并排对比（左原文 / 右改写稿）</figcaption></figure>
+            <figure class="shot"><img src="shots/resume-compare.png" alt="总分对比：85 提升 15 分到 100"><figcaption>总分对比：85 → 100（提升 15 分）</figcaption></figure>
+            <figure class="shot"><img src="shots/resume-extra-1.png" alt="样本 B：85 提升 12 分到 97"><figcaption>样本 B：85 → 97（+12），五维逐项差值</figcaption></figure>
+            <figure class="shot"><img src="shots/resume-extra-2.png" alt="样本 A：88 提升 1.22 分到 89.22"><figcaption>样本 A：高基线下仅 +1.22，质检不刷分</figcaption></figure>
+            <figure class="shot"><img src="shots/resume-rewritten.png" alt="优化后简历"><figcaption>优化后简历：量化成果前置、ATS 友好</figcaption></figure>
+            <figure class="shot"><img src="shots/resume-api-docs.png" alt="自动生成的 OpenAPI 文档"><figcaption>自动生成的 OpenAPI 文档（/docs）</figcaption></figure>
+        </div>
+    </section>
+
+    <!-- ==================== 工程细节 ==================== -->
+    <section class="wrap">
+        <div class="section-head" data-reveal>
+            <span class="eyebrow">工程细节</span>
+            <h2 class="h2" style="margin-top: var(--space-4)">我在这条链路上做的事情</h2>
+        </div>
+        <div class="bento">
+            <div class="card col-6" data-reveal>
+                <h3 style="font-size: var(--font-size-md)">把「不可见」变成「可见」</h3>
+                <ul class="bullet-list">
+                    <li>每一步执行完毕即落库，前端步骤条只反映真实状态，避免「假进度」。</li>
+                    <li>质检轮次对外暴露：能看到第几轮改写、以及本轮为什么被打回。</li>
+                    <li>失败时明确显示失败步骤的中文名与友好提示，原始堆栈只留在后端日志。</li>
+                </ul>
+            </div>
+            <div class="card col-6" data-reveal data-reveal-delay="120">
+                <h3 style="font-size: var(--font-size-md)">素材与实现的一致性</h3>
+                <ul class="bullet-list">
+                    <li>整理作品集时我发现早期截图里出现过 <code>提升 1.219999999999989 分</code> 这样的浮点显示。</li>
+                    <li>回查源码确认：差值计算已经 <code>Math.round(x*100)/100</code> 四舍五入，并且每维分数都有 <code>clampScore</code> 边界保护，当前版本不会出现该问题。</li>
+                    <li>结论是「截图比代码旧」。我重新构建了一次前端确认产物与源码一致，并把这条作为作品集素材的校正记录下来。</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== 链接 ==================== -->
+    <section class="wrap" id="contact">
+        <div class="bento">
+            <div class="card col-12" data-reveal>
+                <h3>源码与文档</h3>
+                <p>仓库包含 5 个 Agent 的完整 Prompt 体系、LangGraph 编排、RQ Worker、Redis 缓存、Vue 3 前端与实测对比数据。</p>
+                <div class="hero-actions" style="justify-content: flex-start; margin-top: var(--space-5)">
+                    <a class="btn primary" data-repo="resume" href="#">查看 GitHub 源码</a>
+                    <a class="btn" data-site="github" href="#">我的 GitHub 主页</a>
+                    <a class="btn" href="index.html#contact">联系我</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<footer class="site-foot">
+    <div class="wrap">
+        <span>© 2026 <span data-site="name">你的名字</span> · 简历多智能体优化助手</span>
+        <span><a href="index.html">返回作品集首页</a></span>
+    </div>
+</footer>
+
+<div class="dock-wrap" id="dock"></div>
+<script src="assets/dock.js" defer></script>
+</body>
+</html>
