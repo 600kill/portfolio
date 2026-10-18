@@ -8,16 +8,16 @@
  */
 
 const SITE = {
-    name: '600kill',                                  // 展示用称呼（可换成真实姓名）
+    name: '可子翔',                                   // 展示用称呼（真实姓名，面试官可对上人）
     github: 'https://github.com/600kill',
     email: '2070819828@qq.com',
     wechat: 'wxid_i3vmy5f434ri22',
     direction: 'AI 应用开发 / 全栈开发（实习）',
     avatar: 'assets/avatar.jpg',
-    resume: 'resume/resume-ai.pdf',                   // 简历 PDF（resume/ 目录下另有 resume-backend.pdf / resume-fullstack.pdf 三版）
+    resume: 'resume/resume-fullstack.pdf',            // 投递全栈开发岗，默认给全栈版（另有 resume-ai.pdf / resume-backend.pdf）
     // 两个项目的源码仓库（留空则按钮显示为「源码暂未公开」并禁用）
     repoAgent: 'https://github.com/600kill/Agent-Platform',
-    repoResume: '',
+    repoResume: 'https://github.com/600kill/resume-multi-agent-helper',
 };
 
 const svg = (paths, extra = '') =>

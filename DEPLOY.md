@@ -43,6 +43,21 @@ robocopy C:\Users\20708\PycharmProjects\AIRAG\main_project\portfolio ^
 
 ---
 
+## 更新已上线的站点（2026-09-30 已部署）
+
+线上地址：**https://600kill.github.io/portfolio/**　仓库：https://github.com/600kill/portfolio
+本地已配好 remote（名为 `portfolio`），改完作品集后在 `main_project` 根目录执行：
+
+```powershell
+git add portfolio/
+git commit -m "update: 作品集更新说明"
+git branch -D portfolio-only
+git subtree split --prefix=portfolio -b portfolio-only
+git push portfolio portfolio-only:main
+```
+
+push 后等约 1 分钟 GitHub Pages 自动重建；强刷（Ctrl+F5）或加 `?v=2` 绕过 CDN 缓存验证。
+
 ## 本地预览
 
 因为用的是相对路径（`assets/…`、`shots/…`），直接用浏览器打开 `portfolio/index.html` 就能看；
